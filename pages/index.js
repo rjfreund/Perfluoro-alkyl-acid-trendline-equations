@@ -29,14 +29,14 @@ export default function Home() {
               <th scope="col">% soil organic carbon</th>
               {/* <th scope="col">Shoot Equation</th> */}
               <th scope="col">estimated shoot BCF</th>
-              <th scope="col">estimated shoot PFAAS concentration</th>
+              <th scope="col">estimated shoot PFAAs concentration</th>
               <th scope="col">+ 95% CI</th>
               <th scope="col">R<sup>2</sup></th>
               {/* <th scope="col">95% CI</th> */}
               {/* <th scope="col">x input</th> */}
               {/* <th scope="col">Root Equation</th> */}
               <th scope="col">estimated root BCF</th>
-              <th scope="col">estimated root PFAAS concentration</th>
+              <th scope="col">estimated root PFAAs concentration</th>
               <th scope="col">+ 95% CI</th>
               <th scope="col">R<sup>2</sup></th>
               {/* <th scope="col">95% CI</th> */}
