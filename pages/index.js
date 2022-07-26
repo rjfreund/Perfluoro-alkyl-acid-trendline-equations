@@ -27,19 +27,19 @@ export default function Home() {
               <th scope="col">PFAA</th>
               <th scope="col">soil concentration</th>
               <th scope="col">% soil organic carbon</th>
-              {/* <th scope="col">Shoot Equation</th> */}
+              <th scope="col">Shoot Equation</th>
               <th scope="col">estimated shoot BCF</th>
               <th scope="col">estimated shoot PFAAs concentration</th>
               <th scope="col">+ 95% CI</th>
               <th scope="col">R<sup>2</sup></th>
-              {/* <th scope="col">95% CI</th> */}
-              {/* <th scope="col">x input</th> */}
-              {/* <th scope="col">Root Equation</th> */}
+              <th scope="col">95% CI</th>
+              <th scope="col">x input</th>
+              <th scope="col">Root Equation</th>
               <th scope="col">estimated root BCF</th>
               <th scope="col">estimated root PFAAs concentration</th>
               <th scope="col">+ 95% CI</th>
               <th scope="col">R<sup>2</sup></th>
-              {/* <th scope="col">95% CI</th> */}
+              <th scope="col">95% CI</th>
             </tr>
           </thead>
           <tbody>
@@ -55,16 +55,19 @@ export default function Home() {
                         var value = event.target.value;
                         return prevState.map((obj) => {
                           if (obj.id == pfaa.id) {
-                            var freshState = { ...obj };
+                            var updatedPfaa = { ...obj };
                             var soilConcentration = Number(value);
-                            freshState[pfaa.fields.PFAA + "soilConcentration"] = soilConcentration;
-                            if (pfaa[pfaa.fields.PFAA + "shootY"]) {
-                              freshState[pfaa.fields.PFAA + "estimatedShootPFAAsConcentrationPlusConfidenceInterval"] = ((pfaa[pfaa.fields.PFAA + "shootY"] * soilConcentration) + pfaa.fields['Shoot 95% Confidence Interval']).toFixed(2);
+                            updatedPfaa.fields.soilConcentration = soilConcentration;
+                            //(pfaa[pfaa.fields.PFAA + "shootY"] && pfaa[pfaa.fields.PFAA + "soilConcentration"]) && (pfaa[pfaa.fields.PFAA + "shootY"] * pfaa[pfaa.fields.PFAA + "soilConcentration"]).toFixed(2)
+                            if (updatedPfaa.fields.shootY) {
+
+                              updatedPfaa.fields.estimatedShootPFAAsConcentration = updatedPfaa.fields.shootY * soilConcentration;
+                              updatedPfaa.fields.estimatedShootPFAAsConcentrationPlusConfidenceInterval = (updatedPfaa.fields.estimatedShootPFAAsConcentration + updatedPfaa.fields['Shoot 95% Confidence Interval']).toFixed(2);
                             }
-                            if (pfaa[pfaa.fields.PFAA + "rootY"]) {
-                              freshState[pfaa.fields.PFAA + "estimatedRootPFAAsConcentrationPlusConfidenceInterval"] = ((pfaa[pfaa.fields.PFAA + "rootY"] * soilConcentration) + pfaa.fields['Root 95% Confidence Interval']).toFixed(2);
+                            if (updatedPfaa.fields.rootY) {
+                              updatedPfaa.fields.estimatedRootPFAAsConcentrationPlusConfidenceInterval = ((updatedPfaa.fields.rootY * soilConcentration) + pfaa.fields['Root 95% Confidence Interval']).toFixed(2);
                             }
-                            return freshState;
+                            return updatedPfaa;
                           }
                           return obj;
                         });
@@ -81,18 +84,18 @@ export default function Home() {
                         var value = event.target.value;
                         return prevState.map((obj) => {
                           if (obj.id == pfaa.id) {
-                            var freshState = { ...obj };
+                            var updatedPfaa = { ...obj };
                             var percentSoilOrganicCarbon = Number(value);
-                            freshState[pfaa.fields.PFAA + "X"] = percentSoilOrganicCarbon;
-                            freshState[pfaa.fields.PFAA + "shootY"] = (pfaa.fields["Shoot Coefficient"] * percentSoilOrganicCarbon + pfaa.fields["Shoot Constant"]).toFixed(2);
-                            freshState[pfaa.fields.PFAA + "rootY"] = (pfaa.fields["Root Coefficient"] * percentSoilOrganicCarbon + pfaa.fields["Root Constant"]).toFixed(2);
-                            if (freshState[pfaa.fields.PFAA + "shootY"] && pfaa[pfaa.fields.PFAA + "soilConcentration"]) {
-                              freshState[pfaa.fields.PFAA + "estimatedShootPFAAsConcentrationPlusConfidenceInterval"] = ((freshState[pfaa.fields.PFAA + "shootY"] * pfaa[pfaa.fields.PFAA + "soilConcentration"]) + pfaa.fields['Shoot 95% Confidence Interval']).toFixed(2);
+                            updatedPfaa.fields.percentSoilOrganicCarbon = percentSoilOrganicCarbon;
+                            updatedPfaa.fields.shootY = (updatedPfaa.fields["Shoot Coefficient"] * Math.log(percentSoilOrganicCarbon) + updatedPfaa.fields["Shoot Constant"]).toFixed(2);
+                            updatedPfaa.fields.rootY = (updatedPfaa.fields["Root Coefficient"] * Math.log(percentSoilOrganicCarbon) + updatedPfaa.fields["Root Constant"]).toFixed(2);
+                            if (updatedPfaa.fields.shootY && updatedPfaa.fields.soilConcentration) {
+                              updatedPfaa.fields.estimatedShootPFAAsConcentrationPlusConfidenceInterval = ((updatedPfaa.fields.shootY * updatedPfaa.fields.soilConcentration) + updatedPfaa.fields['Shoot 95% Confidence Interval']).toFixed(2);
                             }
-                            if (freshState[pfaa.fields.PFAA + "rootY"] && pfaa[pfaa.fields.PFAA + "soilConcentration"]) {
-                              freshState[pfaa.fields.PFAA + "estimatedRootPFAAsConcentrationPlusConfidenceInterval"] = ((freshState[pfaa.fields.PFAA + "rootY"] * pfaa[pfaa.fields.PFAA + "soilConcentration"]) + pfaa.fields['Root 95% Confidence Interval']).toFixed(2);
+                            if (updatedPfaa.fields.rootY && updatedPfaa.fields.soilConcentration) {
+                              updatedPfaa.fields.estimatedRootPFAAsConcentrationPlusConfidenceInterval = ((updatedPfaa.fields.rootY * updatedPfaa.fields.soilConcentration) + updatedPfaa.fields['Root 95% Confidence Interval']).toFixed(2);
                             }
-                            return freshState;
+                            return updatedPfaa;
                           }
                           return obj;
                         });
@@ -100,43 +103,18 @@ export default function Home() {
                     }}
                   />
                 </td>
-                {/* <td>{`y = ${pfaa.fields['Shoot Coefficient']}ln(x) + ${pfaa.fields['Shoot Constant']}`}</td> */}
-                <td>{pfaa[pfaa.fields.PFAA + "shootY"]}</td>
-                <td>{(pfaa[pfaa.fields.PFAA + "shootY"] && pfaa[pfaa.fields.PFAA + "soilConcentration"]) && (pfaa[pfaa.fields.PFAA + "shootY"] * pfaa[pfaa.fields.PFAA + "soilConcentration"]).toFixed(2)}</td>
-                <td>{pfaa[pfaa.fields.PFAA + "estimatedShootPFAAsConcentrationPlusConfidenceInterval"]}</td>
+                <td>{`y = ${pfaa.fields['Shoot Coefficient']}ln(x) + ${pfaa.fields['Shoot Constant']}`}</td>
+                <td>{pfaa.fields.shootY}</td>
+                <td>{pfaa.fields.estimatedShootPFAAsConcentration && pfaa.fields.estimatedShootPFAAsConcentration.toFixed(2)}</td>
+                <td>{pfaa.fields.estimatedShootPFAAsConcentrationPlusConfidenceInterval}</td>
                 <td>{pfaa.fields['Shoot R-Squared'].toFixed(2)}</td>
-                {/* <td>{pfaa.fields['Shoot 95% Confidence Interval']}</td> */}
-                {/* <td>
-                  <input
-                    type="number"
-                    placeholder="x input for root equation"
-                    onChange={(event) => {
-                      setPFAAs(function (prevState) {
-                        var value = event.target.value;
-                        return prevState.map((obj) => {
-                          if (obj.id == pfaa.id) {
-                            var freshState = { ...obj };
-                            freshState[pfaa.fields.PFAA + "rootX"] =
-                              Number(value);
-                            freshState[pfaa.fields.PFAA + "rootY"] =
-                              pfaa.fields["Root Coefficient"] *
-                              Math.log(value) +
-                              pfaa.fields["Root Constant"];
-                            return freshState;
-                          }
-                          return obj;
-                        });
-                      });
-                      //change from set state to make api call to update item in database
-                    }}
-                  />
-                  </td> */}
-                {/* <td>y = {pfaa.fields['Root Coefficient']}ln(x) + {pfaa.fields['Root Constant']}</td> */}
-                <td>{pfaa[pfaa.fields.PFAA + "rootY"]}</td>
-                <td>{(pfaa[pfaa.fields.PFAA + "rootY"] && pfaa[pfaa.fields.PFAA + "soilConcentration"]) && (pfaa[pfaa.fields.PFAA + "rootY"] * pfaa[pfaa.fields.PFAA + "soilConcentration"]).toFixed(2)}</td>
-                <td>{pfaa[pfaa.fields.PFAA + "estimatedRootPFAAsConcentrationPlusConfidenceInterval"]}</td>
+                <td>{pfaa.fields['Shoot 95% Confidence Interval']}</td>
+                <td>y = {pfaa.fields['Root Coefficient']}ln(x) + {pfaa.fields['Root Constant']}</td>
+                <td>{pfaa.fields.rootY}</td>
+                <td>{(pfaa.fields.rootY && pfaa.fields.soilConcentration) && (pfaa.fields.rootY * pfaa.fields.soilConcentration).toFixed(2)}</td>
+                <td>{pfaa.fields.estimatedRootPFAAsConcentrationPlusConfidenceInterval}</td>
                 <td>{pfaa.fields['Root R-Squared'].toFixed(2)}</td>
-                {/* <td>{pfaa.fields['Root 95% Confidence Interval']}</td> */}
+                <td>{pfaa.fields['Root 95% Confidence Interval']}</td>
               </tr>
             ))}
           </tbody>
