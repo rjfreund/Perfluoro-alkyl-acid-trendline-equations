@@ -13,8 +13,10 @@ export default function Home() {
   }, []);
 
   function updateEquations(updatedPfaa) {
-    updatedPfaa.fields.shootY = (updatedPfaa.fields["Shoot Coefficient"] * Math.log(updatedPfaa.fields.percentSoilOrganicCarbon) + updatedPfaa.fields["Shoot Constant"]).toFixed(2);
-    updatedPfaa.fields.rootY = (updatedPfaa.fields["Root Coefficient"] * Math.log(updatedPfaa.fields.percentSoilOrganicCarbon) + updatedPfaa.fields["Root Constant"]).toFixed(2);
+    if (updatedPfaa.fields.percentSoilOrganicCarbon) {
+      updatedPfaa.fields.shootY = (updatedPfaa.fields["Shoot Coefficient"] * Math.log(updatedPfaa.fields.percentSoilOrganicCarbon) + updatedPfaa.fields["Shoot Constant"]).toFixed(2);
+      updatedPfaa.fields.rootY = (updatedPfaa.fields["Root Coefficient"] * Math.log(updatedPfaa.fields.percentSoilOrganicCarbon) + updatedPfaa.fields["Root Constant"]).toFixed(2);
+    }
     if (updatedPfaa.fields.shootY && updatedPfaa.fields.soilConcentration) {
       updatedPfaa.fields.estimatedShootPFAAsConcentration = updatedPfaa.fields.shootY * updatedPfaa.fields.soilConcentration;
       updatedPfaa.fields.estimatedShootPFAAsConcentrationPlusConfidenceInterval = (updatedPfaa.fields.estimatedShootPFAAsConcentration + updatedPfaa.fields['Shoot 95% Confidence Interval']).toFixed(2);
