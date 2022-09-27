@@ -19,7 +19,6 @@ export default function Home() {
     }
     if (updatedPfaa.fields.shootY && updatedPfaa.fields.soilConcentration) {
       updatedPfaa.fields.estimatedShootPFAAsConcentration = updatedPfaa.fields.shootY * updatedPfaa.fields.soilConcentration;
-      debugger;
       updatedPfaa.fields.estimatedShootBCFPlusConfidenceIntervalTimesSoilConcentration = ((Number(updatedPfaa.fields.shootY) + updatedPfaa.fields['Shoot 95% Confidence Interval']) * updatedPfaa.fields.soilConcentration).toFixed(2);
     }
     if (updatedPfaa.fields.rootY && updatedPfaa.fields.soilConcentration) {
@@ -74,7 +73,6 @@ export default function Home() {
                           if (obj.id == pfaa.id) {
                             var updatedPfaa = { ...obj };
                             updatedPfaa.fields.soilConcentration = Number(value);
-                            debugger;
                             updatedPfaa = updateEquations({ ...updatedPfaa })
                             return updatedPfaa;
                           }
