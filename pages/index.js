@@ -19,11 +19,12 @@ export default function Home() {
     }
     if (updatedPfaa.fields.shootY && updatedPfaa.fields.soilConcentration) {
       updatedPfaa.fields.estimatedShootPFAAsConcentration = updatedPfaa.fields.shootY * updatedPfaa.fields.soilConcentration;
-      updatedPfaa.fields.estimatedShootPFAAsConcentrationPlusConfidenceInterval = (updatedPfaa.fields.estimatedShootPFAAsConcentration + updatedPfaa.fields['Shoot 95% Confidence Interval']).toFixed(2);
+      debugger;
+      updatedPfaa.fields.estimatedShootBCFPlusConfidenceIntervalTimesSoilConcentration = ((Number(updatedPfaa.fields.shootY) + updatedPfaa.fields['Shoot 95% Confidence Interval']) * updatedPfaa.fields.soilConcentration).toFixed(2);
     }
     if (updatedPfaa.fields.rootY && updatedPfaa.fields.soilConcentration) {
       updatedPfaa.fields.estimatedRootPFAAsConcentration = updatedPfaa.fields.rootY * updatedPfaa.fields.soilConcentration;
-      updatedPfaa.fields.estimatedRootPFAAsConcentrationPlusConfidenceInterval = ((updatedPfaa.fields.rootY * updatedPfaa.fields.soilConcentration) + updatedPfaa.fields['Root 95% Confidence Interval']).toFixed(2);
+      updatedPfaa.fields.estimatedRootBCFPlusConfidenceIntervalTimesSoilConcentration = ((Number(updatedPfaa.fields.rootY) + updatedPfaa.fields['Root 95% Confidence Interval']) * updatedPfaa.fields.soilConcentration).toFixed(2);
     }
 
     return updatedPfaa;
@@ -73,6 +74,7 @@ export default function Home() {
                           if (obj.id == pfaa.id) {
                             var updatedPfaa = { ...obj };
                             updatedPfaa.fields.soilConcentration = Number(value);
+                            debugger;
                             updatedPfaa = updateEquations({ ...updatedPfaa })
                             return updatedPfaa;
                           }
@@ -105,13 +107,13 @@ export default function Home() {
                 <td hidden>{`y = ${pfaa.fields['Shoot Coefficient']}ln(x) + ${pfaa.fields['Shoot Constant']}`}</td>
                 <td>{pfaa.fields.shootY}</td>
                 <td>{pfaa.fields.estimatedShootPFAAsConcentration && pfaa.fields.estimatedShootPFAAsConcentration.toFixed(2)}</td>
-                <td>{pfaa.fields.estimatedShootPFAAsConcentrationPlusConfidenceInterval}</td>
+                <td>{pfaa.fields.estimatedShootBCFPlusConfidenceIntervalTimesSoilConcentration}</td>
                 <td>{pfaa.fields['Shoot R-Squared'].toFixed(2)}</td>
                 <td hidden>{pfaa.fields['Shoot 95% Confidence Interval']}</td>
                 <td hidden>y = {pfaa.fields['Root Coefficient']}ln(x) + {pfaa.fields['Root Constant']}</td>
                 <td>{pfaa.fields.rootY}</td>
                 <td>{pfaa.fields.estimatedRootPFAAsConcentration && pfaa.fields.estimatedRootPFAAsConcentration.toFixed(2)}</td>
-                <td>{pfaa.fields.estimatedRootPFAAsConcentrationPlusConfidenceInterval}</td>
+                <td>{pfaa.fields.estimatedRootBCFPlusConfidenceIntervalTimesSoilConcentration}</td>
                 <td>{pfaa.fields['Root R-Squared'].toFixed(2)}</td>
                 <td hidden>{pfaa.fields['Root 95% Confidence Interval']}</td>
               </tr>
